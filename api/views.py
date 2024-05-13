@@ -4,7 +4,6 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from .models import BlogPost
-from .serializers import BlogPostSerializer
 from g4f.client import Client
 import requests
 from .train import searchDistrict,searchProvince,searchWard,searchVitri,searchJobFit
@@ -64,7 +63,7 @@ def SearchJobData(request):
 
 class CreateBotAddress(generics.ListCreateAPIView):
     queryset = BlogPost.objects.all()
-    serializer_class = BlogPostSerializer
+ 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
@@ -81,7 +80,6 @@ class CreateBotAddress(generics.ListCreateAPIView):
         
 class BlogPostListCreate(generics.ListCreateAPIView):
     queryset = BlogPost.objects.all()
-    serializer_class = BlogPostSerializer
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
@@ -102,5 +100,4 @@ class BlogPostListCreate(generics.ListCreateAPIView):
 
 class BlogPostRetrieveUpdateDestory(generics.RetrieveUpdateDestroyAPIView):
     queryset = BlogPost.objects.all()
-    serializer_class = BlogPostSerializer
     lookup_field = "pk"
