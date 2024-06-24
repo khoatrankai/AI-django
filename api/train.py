@@ -122,13 +122,16 @@ def StartInfoChatPublic():
     infoFile = listFileCustomPublic()
     # regex = r"\d+"
     listInfoFile = infoFile['nameFile']
+    
     fileDefault = open(infoFile['pathDir']+"/data/infoAI.txt", "r", encoding='utf-8')
     infoDefault = fileDefault.read()
     idMax = 0
     if len(listInfoFile) != 0:
+        numbers = [int(s.replace('custom', '')) for s in listInfoFile]
+        max_number = max(numbers)
         # fileIdMax = listInfoFile[len(listInfoFile)-1].replace("custom","")
-        fileIdMax = listInfoFile[0].replace("custom","")
-        idMax = int(fileIdMax) +1
+        # fileIdMax = listInfoFile[0].replace("custom","")
+        idMax = max_number +1
     file_path = os.path.join(infoFile['path'], "custom"+str(idMax)+".txt")
     # if not os.path.exists(infoFile['path']):
     #   os.makedirs(infoFile['path'])
