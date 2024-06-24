@@ -3,3 +3,4 @@ djangorestframework
 environs
 mysqlclient
 google-generativeai
+django-cors-headers
