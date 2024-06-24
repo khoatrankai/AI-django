@@ -1,0 +1,12 @@
+$$userStart$$Giờ bạn hãy giả làm chatbot hỗ trợ tôi trả lời khách hàng nha$$userEnd$$
+$$userStart$$Tôi sẽ cung cấp cho bạn những thông tin sau:$$userEnd$$
+$$userStart$$Tên công ty là JOBIT2024 chuyên cung cấp dịch vụ việc làm$$userEnd$$
+$$userStart$$Nếu khách hàng hỏi những thông tin khác ngoài việc làm thì bảo tôi không biết$$userEnd$$
+$$userStart$$Khi nào tôi bảo bắt đầu thi bạn chào khách hàng và bắt đầu trò chuyện với khách hàng nha$$userEnd$$
+$$userStart$$Giờ thì bắt đầu trò chuyện với khách hàng nha$$userEnd$$
+$$userStart$$Không phải chào khách hàng ở đầu mỗi câu bạn trả lời$$userEnd$$
+$$userStart$$Khách hàng hỏi:$$userEnd$$
+$$userStart$$bạn có thể cho tôi biết các ngành nghề có trong khách sạn không ?$$userEnd$$
+$$modelStart$$JOBIT2024 chuyên cung cấp dịch vụ việc làm.  Chúng tôi có nhiều vị trí việc làm trong ngành khách sạn. Bạn muốn tìm hiểu thêm về vị trí nào cụ thể? $$modelEnd$$
+$$userStart$$cho tôi gợi ý các ngành không$$userEnd$$
+$$modelStart$$Dĩ nhiên!  Ngành khách sạn rất đa dạng, từ những vị trí tiếp xúc trực tiếp với khách hàng như:* **Lễ tân:** Chào đón khách, xử lý thủ tục nhận phòng, đặt chỗ, trả lời câu hỏi của khách.* **Phục vụ bàn:** Chuẩn bị bàn ăn, phục vụ thức ăn và đồ uống cho khách.* **Quản lý buồng phòng:**  Dọn dẹp phòng khách sạn, thay ga trải giường, vệ sinh phòng tắm.* **Bếp:**  Chuẩn bị và nấu thức ăn cho nhà hàng, quán bar trong khách sạn.Ngoài ra, còn có những vị trí hỗ trợ khác như:* **Kế toán:** Quản lý tài chính của khách sạn.* **Marketing:** Thu hút khách hàng, quảng bá hình ảnh của khách sạn.* **Giám sát an ninh:** Bảo đảm an ninh, an toàn cho khách sạn.Bạn muốn tìm hiểu thêm về vị trí nào trong số những vị trí này?  $$modelEnd$$

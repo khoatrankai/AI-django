@@ -1,15 +1,15 @@
- Văn phòng với id 2 
- Khách sạn/Nhà hàng với id 3 
- IT/Lập trình viên với id 4 
- Design với id 5 
- Marketing với id 6 
- Lao động phổ thông với id 7 
- Ngân hàng với id 8 
- Beauty & Spa với id 9 
- Xuất nhập khẩu với id 10 
- Dịch vụ với id 11 
- Giáo dục - Đào tạo với id 12 
- Dịch thuật với id 13 
- Khoa học - Kỹ thuật với id 14 
- Chuyển nhà/Vệ sinh với id 15 
- Ngành khác với id 17 
+ Văn phòng với id 2 ,
+ Khách sạn/Nhà hàng với id 3 ,
+ IT/Lập trình viên với id 4 ,
+ Design với id 5 ,
+ Marketing với id 6 ,
+ Lao động phổ thông với id 7 ,
+ Ngân hàng với id 8 ,
+ Beauty & Spa với id 9 ,
+ Xuất nhập khẩu với id 10 ,
+ Dịch vụ với id 11 ,
+ Giáo dục - Đào tạo với id 12 ,
+ Dịch thuật với id 13 ,
+ Khoa học - Kỹ thuật với id 14 ,
+ Chuyển nhà/Vệ sinh với id 15 ,
+ Ngành khác với id 17 ,
