@@ -126,7 +126,8 @@ def StartInfoChatPublic():
     infoDefault = fileDefault.read()
     idMax = 0
     if len(listInfoFile) != 0:
-        fileIdMax = listInfoFile[len(listInfoFile)-1].replace("custom","")
+        # fileIdMax = listInfoFile[len(listInfoFile)-1].replace("custom","")
+        fileIdMax = listInfoFile[0].replace("custom","")
         idMax = int(fileIdMax) +1
     file_path = os.path.join(infoFile['path'], "custom"+str(idMax)+".txt")
     # if not os.path.exists(infoFile['path']):
