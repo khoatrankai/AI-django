@@ -20,7 +20,7 @@ def ChangeDataTxt(link,content):
 
 def fetch_geminiOption(content,listContent):
     # print(listContent)
-    genai.configure(api_key="AIzaSyCMjfpkbb6c75SFOvRD8C2ImMLBA12jssQ")
+    genai.configure(api_key="AIzaSyDesxo_XeqjZZszoFgk4aPA54FptkXWedk")
 
     # Set up the model
     generation_config = {
@@ -56,10 +56,11 @@ def fetch_geminiOption(content,listContent):
     chat_session = model.start_chat(
         history=listContent
     )
-
-    response = chat_session.send_message(content)
-    # print(response.text)
-    return(response.text)
+    try:
+        response = chat_session.send_message(content)
+        return response.text
+    except Exception as e:
+        return 'Xin lỗi Server AI tạm thời bảo trì...'
 
 # def fetch_geminiFilterCV(content,listContent):
 #     # print(listContent)
@@ -109,7 +110,7 @@ def listFileCustomPublic():
     current_file_path = os.path.abspath(__file__)
     data_dir = os.path.dirname(current_file_path)
     # print(data_dir)
-    path = data_dir+'/data/CustomPublic'
+    path = data_dir+'\data\CustomPublic'
     txt_files = []
     name_files = []
     for filename in os.listdir(path):
@@ -142,6 +143,7 @@ def StartInfoChatPublic():
 def CheckInfoChatPublic(id):
     regex = r"\d+"
     listInfo = listFileCustomPublic()
+    # print(listInfo)
     linkFile = ""
     if len(listInfo['nameFile']) != 0:
         for i in range(len(listInfo['nameFile'])):
@@ -169,8 +171,11 @@ def CheckInfoChatPublic(id):
 
 def NewChatPublic(id,content):
     infoCheck = CheckInfoChatPublic(id)
+    # print(infoCheck)
     # print("chu viet",infoCheck['listHistory'])
+    print(content,infoCheck['listHistory'])
     newModel = fetch_geminiOption(content,infoCheck['listHistory'])
+    print(newModel)
     newFileContent = infoCheck['fileChatOld'] +'\n' +"$$userStart$$"+content+"$$userEnd$$" +'\n'+ "$$modelStart$$"+newModel.replace("\n","")+"$$modelEnd$$"
     ChangeDataTxt(infoCheck['linkFile'],newFileContent)
     return newModel
@@ -235,8 +240,7 @@ def NewChatID(id,content):
 
 
 def fetch_gemini(content):
-    print("AI XU LY:"+content)
-    genai.configure(api_key="AIzaSyCMjfpkbb6c75SFOvRD8C2ImMLBA12jssQ")
+    genai.configure(api_key="AIzaSyDesxo_XeqjZZszoFgk4aPA54FptkXWedk")
 
     # Set up the model
     generation_config = {
@@ -339,6 +343,7 @@ def searchJobs():
     return nganh
 
 def searchJobFit(content):
+    print("ok noi dung"+content)
     if len(extract_words(content)):
         nganh = searchJobs()
         nganh = "'"+ nganh + "'"
@@ -358,18 +363,18 @@ def searchJobFit(content):
     return "17"
 
 def searchVitri(content):
-    print("NOIII:"+content)
+    # print("NOIII:"+content)
     number = None
     number2 = None
     number3 = None
-    print(str(len(extract_words(content))))
+    # print(str(len(extract_words(content))))
           
     if len(extract_words(content)):
         dataProvince = searchProvince()
         # contentData = re.sub(r'\d+', '', content)
         contentData = content
         string = ""
-        print("vao den")
+        # print("vao den")
         while True: 
             string = fetch_gemini('Hãy cho tôi biết mô tả địa chỉ sau:' +contentData + '\n' +'thuộc mã nào sau đây và bạn chỉ cần trả lời là mã gì: '+ dataProvince +'\n')
             if(string):
@@ -418,14 +423,16 @@ def count_element(array, element):
     return count/len(array) * 100
 
 def JobFitContent(dataLoad):
-    idAddress = -1
+    idAddress = {'wardId':0}
     arrayJob = []
-    print(dataLoad)
+    print("vo")
     for i in dataLoad:
         if i['type'] == 'info_person':
+            # print(i)
             idAddress = searchVitri(i['address'])
         elif i['type'] == 'info_project':
-            
+            # print(i)
+
             if len(i['moreCvProjects']) == 0 and i['moreCvProjects'][0]['name'] == "" and i['moreCvProjects'][0]['position'] == "" and i['moreCvProjects'][0]['functionality'] == "" and i['moreCvProjects'][0]['technology'] == "":
                 arrayJob.append("17")
                 break
@@ -440,6 +447,8 @@ def JobFitContent(dataLoad):
             else:
                 arrayJob.append(searchJobFit(dataInfo))
         else:
+            # print(i)
+
             if len(i['moreCvExtraInformations']) == 0 and i['moreCvExtraInformations'][0]['company'] == "" and i['moreCvExtraInformations'][0]['position'] == "" and i['moreCvExtraInformations'][0]['description']:
                 arrayJob.append("17")
                 break
@@ -453,11 +462,14 @@ def JobFitContent(dataLoad):
                 arrayJob.append("17")
             else:
                 arrayJob.append(searchJobFit(dataInfo))
+            # print(arrayJob)
     dataPercent = []
     countItem = remove_duplicates(arrayJob)
+    print(countItem)
     for i in countItem:
         # dataPercent.append({'categoryId':i,'percent':count_element(arrayJob,i)})
         dataPercent.append({'parentCategoryId':i,'wardId':idAddress['wardId'],'percent':count_element(arrayJob,i)})
+        print(idAddress['wardId'])
     # return {'percentJob':dataPercent,'idAddress': idAddress}
     return dataPercent
     
@@ -489,7 +501,7 @@ def FilterCvForPost(contentPost,listCV):
     listRender = []
     for i in listMatch:
         listRender.append({'accountId':listCV[int(i)-1]['accountId'],'cvIndex':listCV[int(i)-1]['cvIndex']})
-    print(listRender)
+    # print(listRender)
     return listRender
 
 
@@ -517,7 +529,7 @@ def FilterPostForCv(contentCV,listPost):
         filterN = idataLoad['description'].replace('\n',' ')
         filterNumber = re.sub(r'\d+', '', filterN)
         descripPost = descripPost + filterNumber
-        print(descripPost)
+        # print(descripPost)
 
         arrayPost.append({"role":"user","parts":descripPost+"'"})
     regex = r"\d+"
@@ -525,7 +537,7 @@ def FilterPostForCv(contentCV,listPost):
     listRender = []
     for i in listMatch:
         listRender.append({'postId':i})
-    print(listRender)
+    # print(listRender)
     return listRender
 
 # def FilterPostCV(contentCV,listPost):
