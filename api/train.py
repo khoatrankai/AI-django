@@ -110,7 +110,7 @@ def listFileCustomPublic():
     current_file_path = os.path.abspath(__file__)
     data_dir = os.path.dirname(current_file_path)
     # print(data_dir)
-    path = data_dir+'\data\CustomPublic'
+    path = data_dir+'/data/CustomPublic'
     txt_files = []
     name_files = []
     for filename in os.listdir(path):
