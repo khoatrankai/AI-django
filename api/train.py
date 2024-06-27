@@ -240,6 +240,7 @@ def NewChatID(id,content):
 
 
 def fetch_gemini(content):
+    print("noi dung loc:"+content)
     genai.configure(api_key="AIzaSyDesxo_XeqjZZszoFgk4aPA54FptkXWedk")
 
     # Set up the model
