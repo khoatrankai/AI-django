@@ -279,6 +279,7 @@ def fetch_gemini(content):
     ]
     try:
         response = model.generate_content(prompt_parts)
+        print(response.text)
         return response.text
     except Exception as e:
         return '26848'
