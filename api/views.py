@@ -71,13 +71,8 @@ def ChatAi22(request):
             return JsonResponse({'message': 'Không thể lấy dữ liệu từ API'}, status=500)
     elif request.method == 'POST':
         datas = json.loads(request.body)
-        dataId = datas.get('id')
+        # dataId = datas.get('id')
         dataContent = datas.get('content').replace('\n',"")
-        if dataContent and dataId:
-            datasetup = NewChatPublic(dataId, dataContent)
-            return JsonResponse({'data': datasetup})
-        else:
-            return JsonResponse({'data': [], 'message': "Không cung cấp đủ thông tin"})
     else:
         return JsonResponse({'message':'Unsuccessful'}, status=405)
 
