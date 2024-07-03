@@ -240,7 +240,6 @@ def NewChatID(id,content):
 
 
 def fetch_gemini(content):
-    print("noi dung loc:"+content)
     genai.configure(api_key="AIzaSyCbe9R6AxyCSp-lhwPNc8ceMYOZv2BYARQ")
 
     # Set up the model
@@ -283,14 +282,14 @@ def fetch_gemini(content):
         print(response.text)
         return response.text
     except Exception as e:
-        return '26848'
+        return '10'
 
 def extract_words(text):
     words = re.findall(r'\b[A-Za-z]+\b', text)
     return words
 
 def searchProvince():
-    response2 = requests.get('https://admission-machines-awesome-higher.trycloudflare.com/api/v1/locations/p')
+    response2 = requests.get('https://moreover-him-folding-hughes.trycloudflare.com/api/v1/locations/p')
     data2 = response2.json()
     dataJobFull2 = ""
     for i in data2['data']:
@@ -299,7 +298,7 @@ def searchProvince():
 
 def searchProvince22():
     try:
-        response2 = requests.get('https://admission-machines-awesome-higher.trycloudflare.com/api/v1/locations/p')
+        response2 = requests.get('https://moreover-him-folding-hughes.trycloudflare.com/api/v1/locations/p')
         data2 = response2.json()
         return data2
     except Exception as e:
@@ -308,7 +307,7 @@ def searchProvince22():
    
 
 def searchDistrict(id):
-    response2 = requests.get('https://admission-machines-awesome-higher.trycloudflare.com/api/v1/locations/d?pid='+str(id))
+    response2 = requests.get('https://moreover-him-folding-hughes.trycloudflare.com/api/v1/locations/d?pid='+str(id))
     data2 = response2.json()
     dataJobFull2 = ""
     for i in data2['data']:
@@ -317,7 +316,7 @@ def searchDistrict(id):
     
 
 def searchWard(id):
-    response2 = requests.get('https://admission-machines-awesome-higher.trycloudflare.com/api/v1/locations/w?did='+id)
+    response2 = requests.get('https://moreover-him-folding-hughes.trycloudflare.com/api/v1/locations/w?did='+id)
     data2 = response2.json()
     dataJobFull2 = ""
     for i in data2['data']:
@@ -345,7 +344,6 @@ def searchJobs():
     return nganh
 
 def searchJobFit(content):
-    print("ok noi dung"+content)
     if len(extract_words(content)):
         nganh = searchJobs()
         nganh = "'"+ nganh + "'"
@@ -388,10 +386,6 @@ def searchVitri(content):
             string2 = ""
             district = searchDistrict(number)
             while True: 
-                # response2 = client.chat.completions.create(
-                #             model="gpt-3.5-turbo",
-                #             messages=[{"role": "user", "content": 'Hãy cho tôi biết mô tả địa chỉ sau:' +contentData + '\n' +'thuộc mã nào sau đây và bạn chỉ cần trả lời là mã gì: '+ district +'\n'}],
-                # )
                 string2 = fetch_gemini('Hãy cho tôi biết mô tả địa chỉ sau:' +contentData + '\n' +'thuộc mã nào sau đây và bạn chỉ cần trả lời là mã gì: '+ district +'\n')
                 if(string2):
                     break;
@@ -427,29 +421,34 @@ def count_element(array, element):
 def JobFitContent(dataLoad):
     idAddress = {'wardId':0}
     arrayJob = []
-    print("vo")
+    # print("vo",dataLoad)x
     for i in dataLoad:
         if i['type'] == 'info_person':
-            # print(i)
+            # print("oke1",i)
             idAddress = searchVitri(i['address'])
         elif i['type'] == 'info_project':
-            # print(i)
+            print("oke2",i)
 
             if len(i['moreCvProjects']) == 0 and i['moreCvProjects'][0]['name'] == "" and i['moreCvProjects'][0]['position'] == "" and i['moreCvProjects'][0]['functionality'] == "" and i['moreCvProjects'][0]['technology'] == "":
+                print("qua roi 1")
                 arrayJob.append("17")
                 break
             countBreak = 0
             dataInfo = ""
             for j in i['moreCvProjects']:
+                print("qua roi 2")
+
                 if j['name'] == "" and j['position'] == "" and j['functionality'] == "" and j['technology'] == "":
                     countBreak = countBreak + 1
                 dataInfo = dataInfo +j['name'] + ','+j['position'] + ','+j['functionality']+','+j['technology'] +';'
             if countBreak == len(i['moreCvProjects']):
+                print("qua roi 2")
                 arrayJob.append("17")
             else:
+                print('den roi ne')
                 arrayJob.append(searchJobFit(dataInfo))
         else:
-            # print(i)
+            # print("oke3",i)
 
             if len(i['moreCvExtraInformations']) == 0 and i['moreCvExtraInformations'][0]['company'] == "" and i['moreCvExtraInformations'][0]['position'] == "" and i['moreCvExtraInformations'][0]['description']:
                 arrayJob.append("17")
