@@ -20,7 +20,7 @@ def my_view(request):
 def fetch_data(request):
     # Replace with the actual API URL
     if request.method == 'GET':
-        api_url = 'https://moreover-him-folding-hughes.trycloudflare.com/api/v1/categories'
+        api_url = 'https://web-service-tk.onrender.com/api/v1/categories'
 
         try:
             response = requests.get(api_url)
