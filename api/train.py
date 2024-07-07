@@ -289,7 +289,7 @@ def extract_words(text):
     return words
 
 def searchProvince():
-    response2 = requests.get('https://web-service-tk.onrender.com/api/v1/locations/p')
+    response2 = requests.get('https://backend-hcmute-nodejs.onrender.com/api/v1/locations/p')
     data2 = response2.json()
     dataJobFull2 = ""
     for i in data2['data']:
@@ -298,7 +298,7 @@ def searchProvince():
 
 def searchProvince22():
     try:
-        response2 = requests.get('https://web-service-tk.onrender.com/api/v1/locations/p')
+        response2 = requests.get('https://backend-hcmute-nodejs.onrender.com/api/v1/locations/p')
         data2 = response2.json()
         return data2
     except Exception as e:
@@ -307,7 +307,7 @@ def searchProvince22():
    
 
 def searchDistrict(id):
-    response2 = requests.get('https://web-service-tk.onrender.com/api/v1/locations/d?pid='+str(id))
+    response2 = requests.get('https://backend-hcmute-nodejs.onrender.com/api/v1/locations/d?pid='+str(id))
     data2 = response2.json()
     dataJobFull2 = ""
     for i in data2['data']:
@@ -316,7 +316,7 @@ def searchDistrict(id):
     
 
 def searchWard(id):
-    response2 = requests.get('https://web-service-tk.onrender.com/api/v1/locations/w?did='+id)
+    response2 = requests.get('https://backend-hcmute-nodejs.onrender.com/api/v1/locations/w?did='+id)
     data2 = response2.json()
     dataJobFull2 = ""
     for i in data2['data']:
