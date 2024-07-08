@@ -13,6 +13,7 @@ urlpatterns = [
     path("chatgpttest/",views.CreateBotAddress.as_view(), name="views-gpt-chat"),
     path('chat/',views.my_view,name="my view"),
     path('jobFit/',views.SearchJobFit,name="job fit"),
+    path('checkWar/',views.CheckWar,name="check fit"),
     path('aiChat/',views.ChatAi,name="chatbot"),
     path('aiChat22/',views.ChatAi22,name="chatbot22"),
     path('aiStartChat/',views.GenerateChatAi,name="generateBot"),

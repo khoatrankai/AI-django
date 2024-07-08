@@ -7,7 +7,7 @@ from .models import BlogPost
 # from .serializers import BlogPostSerializer
 # from g4f.client import Client
 import requests
-from .train import searchDistrict,searchProvince22,searchProvince,searchWard,searchVitri,searchJobFit,JobFitContent,NewChatPublic,StartInfoChatPublic,FilterCvForPost,FilterPostForCv
+from .train import searchDistrict,searchProvince22,searchProvince,searchWard,searchVitri,searchJobFit,JobFitContent,NewChatPublic,StartInfoChatPublic,FilterCvForPost,FilterPostForCv,CheckWarInfo
 import json
 
 # client = Client()
@@ -91,6 +91,23 @@ def SearchJobFit(request):
 
     else:
         return JsonResponse({'message':'UnSuccessful'}, status=405)        
+
+@csrf_exempt
+def CheckWar(request):
+    if request.method == 'GET':
+        return JsonResponse({'message':'Successful'})
+    elif request.method == 'POST':
+        datas = json.loads(request.body)
+        dataContent = datas.get('content')
+        if(dataContent):
+            datasetup = CheckWarInfo(dataContent) 
+            return JsonResponse({'data': datasetup})
+        else:
+            return JsonResponse({'data':[],'message': "Không cung cấp đủ thông tin"})
+
+    else:
+        return JsonResponse({'message':'UnSuccessful'}, status=405)        
+
 
 @csrf_exempt
 def ChatAi(request):

@@ -13,6 +13,11 @@ def replace_nulls_with_empty_string(obj):
     return obj
 
 
+def merge_dict_values(obj, separator=','):
+    obj = {key: (value if value is not None else "") for key, value in obj.items()}
+    merged_string = separator.join(obj.values())
+    return merged_string
+
 def InfosCompany():
     current_file_path = os.path.abspath(__file__)
     data_dir = os.path.dirname(current_file_path)
@@ -27,7 +32,7 @@ def ChangeDataTxt(link,content):
 
 def fetch_geminiOption(content,listContent):
     # print(listContent)
-    genai.configure(api_key="AIzaSyBdlkoZDETA0ee7pPb9gA85dYsr9kVLwEg")
+    genai.configure(api_key="AIzaSyBXMkCTesAVSATUSUpfKyv5dTzetZd1hGw")
 
     # Set up the model
     generation_config = {
@@ -241,13 +246,56 @@ def NewChatID(id,content):
 
     
 
+def fetch_geminiWar(content):
+    genai.configure(api_key="AIzaSyBXMkCTesAVSATUSUpfKyv5dTzetZd1hGw")
 
+    # Set up the model
+    generation_config = {
+    "temperature": 1,
+    "top_p": 0.95,
+    "top_k": 64,
+    "max_output_tokens": 8192,
+    }
+
+    safety_settings = [
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    ]
+
+    model = genai.GenerativeModel(model_name="gemini-1.5-flash-latest",
+                                generation_config=generation_config,
+                                safety_settings=safety_settings)
+
+    prompt_parts = [
+    "input: "+content,
+    "output: ",
+    ]
+    try:
+        response = model.generate_content(prompt_parts)
+        print(response.text)
+        return response.text
+    except Exception as e:
+        return 0
 
 
 
 
 def fetch_gemini(content):
-    genai.configure(api_key="AIzaSyBdlkoZDETA0ee7pPb9gA85dYsr9kVLwEg")
+    genai.configure(api_key="AIzaSyBXMkCTesAVSATUSUpfKyv5dTzetZd1hGw")
 
     # Set up the model
     generation_config = {
@@ -428,10 +476,8 @@ def count_element(array, element):
 def JobFitContent(dataLoad):
     idAddress = {'wardId':0}
     arrayJob = []
-    # print("vo",dataLoad)x
     for i in dataLoad:
         if i['type'] == 'info_person':
-            # print("oke1",i)
             idAddress = searchVitri(i['address'])
         elif i['type'] == 'info_project':
 
@@ -450,8 +496,6 @@ def JobFitContent(dataLoad):
             else:
                 arrayJob.append(searchJobFit(dataInfo))
         else:
-            # print("oke3",i)
-
             if len(i['moreCvExtraInformations']) == 0 and i['moreCvExtraInformations'][0]['company'] == "" and i['moreCvExtraInformations'][0]['position'] == "" and i['moreCvExtraInformations'][0]['description']:
                 arrayJob.append("17")
                 break
@@ -474,10 +518,36 @@ def JobFitContent(dataLoad):
         # dataPercent.append({'categoryId':i,'percent':count_element(arrayJob,i)})
         dataPercent.append({'parentCategoryId':i,'wardId':idAddress['wardId'],'percent':count_element(arrayJob,i)})
         print(idAddress['wardId'])
-    # return {'percentJob':dataPercent,'idAddress': idAddress}
     return dataPercent
     
+def CheckWarInfo(dataLoad):
+    try:
+        arrayCheck = []
+        for i in dataLoad:
+            if i['type'] == 'info_person':
+                reChangeJ = replace_nulls_with_empty_string(i)
+                dataCheck = reChangeJ['address'] +" "+reChangeJ['email']+" "+reChangeJ['link']+" "+reChangeJ['name']+" "+reChangeJ['phone']
+                arrayCheck.append(dataCheck)
+            elif i['type'] == 'info_project':
+                for j in i['moreCvProjects']:
+                    reChangeJ = replace_nulls_with_empty_string(j)
+                    dataCheck = reChangeJ['name'] + ','+reChangeJ['position'] + ','+reChangeJ['functionality']+','+reChangeJ['technology']+','+reChangeJ['link']+','+reChangeJ['time']
+                    arrayCheck.append(dataCheck)
 
+            else:
+                for j in i['moreCvExtraInformations']:
+                    reChangeJ = replace_nulls_with_empty_string(j)
+                    dataCheck = reChangeJ['company'] + ','+reChangeJ['position'] + ' , '+reChangeJ['description']+','+reChangeJ['time']
+                    arrayCheck.append(dataCheck)
+        
+        check = fetch_geminiWar('Hãy giúp mình nhận biết đoạn sau có từ nào gây kích động,mang tính xúc phạm,thô tục,thiếu văn hóa, văn tục chửi thề không lịch sự nếu có thì bạn ghi số 1 nếu không bạn ghi số 0:'+'"'+" ".join(arrayCheck)+'"')
+        pattern = r'\d+'
+        match = re.findall(pattern, check)
+        if len(match) > 0 and match[0] == "1":
+            return 1
+        return 0
+    except:
+        return 0
 
 def FilterCvForPost(contentPost,listCV):
     descriptionPost = "Trong các CV trên hãy sắp xếp các CV theo mức độ phù hợp từ cao đến thấp (chỉ cần ghi mỗi mã CV và sắp xếp có dấu phẩy ngăn cách) theo chỉ tiêu của bài đăng sau :"+contentPost
