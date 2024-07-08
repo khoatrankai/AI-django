@@ -38,7 +38,7 @@ def ChangeDataTxt(link,content):
 
 def fetch_geminiOption(content,listContent):
     # print(listContent)
-    genai.configure(api_key="AIzaSyCbe9R6AxyCSp-lhwPNc8ceMYOZv2BYARQ")
+    genai.configure(api_key="AIzaSyAU4OQu7viRp39bcRK0Mq8gXAA8NXimzKE")
 
     # Set up the model
     generation_config = {
@@ -258,7 +258,7 @@ def NewChatID(id,content):
 
 
 def fetch_gemini(content):
-    genai.configure(api_key="AIzaSyCbe9R6AxyCSp-lhwPNc8ceMYOZv2BYARQ")
+    genai.configure(api_key="AIzaSyAU4OQu7viRp39bcRK0Mq8gXAA8NXimzKE")
 
     # Set up the model
     generation_config = {
@@ -455,6 +455,8 @@ def JobFitContent(dataLoad):
             else:
                 arrayJob.append(searchJobFit(dataInfo))
         else:
+            # print("oke3",i)
+
             if len(i['moreCvExtraInformations']) == 0 and i['moreCvExtraInformations'][0]['company'] == "" and i['moreCvExtraInformations'][0]['position'] == "" and i['moreCvExtraInformations'][0]['description']:
                 arrayJob.append("17")
                 break
@@ -472,8 +474,12 @@ def JobFitContent(dataLoad):
             # print(arrayJob)
     dataPercent = []
     countItem = remove_duplicates(arrayJob)
+    print(countItem)
     for i in countItem:
+        # dataPercent.append({'categoryId':i,'percent':count_element(arrayJob,i)})
         dataPercent.append({'parentCategoryId':i,'wardId':idAddress['wardId'],'percent':count_element(arrayJob,i)})
+        print(idAddress['wardId'])
+    # return {'percentJob':dataPercent,'idAddress': idAddress}
     return dataPercent
     
 
