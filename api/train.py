@@ -38,7 +38,7 @@ def ChangeDataTxt(link,content):
 
 def fetch_geminiOption(content,listContent):
     # print(listContent)
-    genai.configure(api_key="AIzaSyAU4OQu7viRp39bcRK0Mq8gXAA8NXimzKE")
+    genai.configure(api_key="AIzaSyDC4Zr_TUMEJQFyTlUMyaNREwEH-6AZ-hI")
 
     # Set up the model
     generation_config = {
@@ -258,7 +258,7 @@ def NewChatID(id,content):
 
 
 def fetch_gemini(content):
-    genai.configure(api_key="AIzaSyAU4OQu7viRp39bcRK0Mq8gXAA8NXimzKE")
+    genai.configure(api_key="AIzaSyDC4Zr_TUMEJQFyTlUMyaNREwEH-6AZ-hI")
 
     # Set up the model
     generation_config = {
