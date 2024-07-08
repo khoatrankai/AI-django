@@ -6,23 +6,12 @@ import google.generativeai as genai
 # from .gpt4free.g4f.client import Client
 # client = Client()
 
-import unicodedata
 def replace_nulls_with_empty_string(obj):
     for key, value in obj.items():
         if value is None:
             obj[key] = ""
     return obj
-def remove_vietnamese_accents(text):
-    # Chuẩn hóa chuỗi Unicode
-    text = unicodedata.normalize('NFD', text)
-    
-    # Loại bỏ các dấu bằng cách chỉ giữ lại các ký tự không thuộc nhóm combining marks
-    text = ''.join(char for char in text if unicodedata.category(char) != 'Mn')
-    
-    # Chuyển về dạng chuẩn
-    text = unicodedata.normalize('NFC', text)
-    
-    return text
+
 
 def InfosCompany():
     current_file_path = os.path.abspath(__file__)
@@ -38,7 +27,7 @@ def ChangeDataTxt(link,content):
 
 def fetch_geminiOption(content,listContent):
     # print(listContent)
-    genai.configure(api_key="AIzaSyAU4OQu7viRp39bcRK0Mq8gXAA8NXimzKE")
+    genai.configure(api_key="AIzaSyBdlkoZDETA0ee7pPb9gA85dYsr9kVLwEg")
 
     # Set up the model
     generation_config = {
@@ -258,7 +247,7 @@ def NewChatID(id,content):
 
 
 def fetch_gemini(content):
-    genai.configure(api_key="AIzaSyCbe9R6AxyCSp-lhwPNc8ceMYOZv2BYARQ")
+    genai.configure(api_key="AIzaSyBdlkoZDETA0ee7pPb9gA85dYsr9kVLwEg")
 
     # Set up the model
     generation_config = {
@@ -297,9 +286,10 @@ def fetch_gemini(content):
     ]
     try:
         response = model.generate_content(prompt_parts)
-        return response.text or response.result.candidates[0].content.parts[0].text
+        print(response.text)
+        return response.text
     except Exception as e:
-        return ""
+        return '10'
 
 def extract_words(text):
     words = re.findall(r'\b[A-Za-z]+\b', text)
@@ -370,7 +360,7 @@ def searchJobFit(content):
         #     messages=[{"role": "user", "content": 'Đây là các ngành của công ty tôi: '+ nganh +' .Hãy cho tôi biết mô tả sau hợp với ngành nào chỉ cần ghi mỗi số id của ngành đúng nhất không cần ghi gì ngoài id:' +req}],
         # )
         response = fetch_gemini('Đây là các ngành của công ty tôi: '+ nganh +' .Hãy cho tôi biết mô tả sau hợp với ngành nào chỉ cần ghi mỗi số id của ngành đúng nhất không cần ghi gì ngoài id:' +req)
-        print("356",response)
+
         pattern = r'\d+'
         # match = re.findall(pattern, response.choices[0].message.content)
         match = re.findall(pattern, response)
@@ -380,46 +370,51 @@ def searchJobFit(content):
     return "17"
 
 def searchVitri(content):
-    try:
-        number = None
-        number2 = None
-        number3 = "26812"
-        if content != "":
-            dataProvince = searchProvince()
-            contentData = content
-            string = ""
-            pattern = r'\d+'
-            print(dataProvince)
+    # print("NOIII:"+content)
+    number = None
+    number2 = None
+    number3 = None
+    # print(str(len(extract_words(content))))
+          
+    if len(extract_words(content)):
+        dataProvince = searchProvince()
+        # contentData = re.sub(r'\d+', '', content)
+        contentData = content
+        string = ""
+        # print("vao den")
+        while True: 
+            string = fetch_gemini('Hãy cho tôi biết mô tả địa chỉ sau:' +contentData + '\n' +'thuộc mã nào sau đây và bạn chỉ cần trả lời là mã gì: '+ dataProvince +'\n')
+            if(string):
+                break
+        pattern = r'\d+'
+        match = re.findall(pattern, string)
+        if match  and len(match) == 1:
+            number = match[0]
+            string2 = ""
+            district = searchDistrict(number)
             while True: 
-                string = fetch_gemini('Hãy cho tôi biết mô tả địa chỉ sau:' +contentData + '\n' +'thuộc mã nào sau đây và bạn chỉ cần trả lời là mã gì: '+ dataProvince +'\n')
-                match = re.findall(pattern, string)
-                if(string != "" and len(match) > 0):
-                    break
-            match = re.findall(pattern, string)
-            if match  and len(match) == 1:   
-                number = match[0]
-                string2 = ""
-                district = searchDistrict(number)
-                while True: 
-                    string2 = fetch_gemini('Hãy cho tôi biết mô tả địa chỉ sau:'+"'" +contentData +"'"+ '\n' +'thuộc mã nào sau đây và bạn chỉ cần trả lời là mã gì: '+ district +'\n')            
-                    if(string2 != "" and len(re.findall(pattern, string2)) > 0):
+                string2 = fetch_gemini('Hãy cho tôi biết mô tả địa chỉ sau:' +contentData + '\n' +'thuộc mã nào sau đây và bạn chỉ cần trả lời là mã gì: '+ district +'\n')
+                if(string2):
+                    break;
+            match2 = re.findall(pattern, string2)
+            if match2  and len(match2) == 1:
+                number2 = match2[0]
+                string3 = ""
+                ward = searchWard(number2)
+                while True:
+                    # response3 = client.chat.completions.create(
+                    #         model="gpt-3.5-turbo",
+                    #         messages=[{"role": "user", "content": 'Hãy cho tôi biết mô tả địa chỉ sau:' +contentData + '\n' +'thuộc mã nào sau đây và bạn chỉ cần trả lời là mã gì: '+ ward +'\n'}],
+                    # )
+                    string3 = fetch_gemini('Hãy cho tôi biết mô tả địa chỉ sau:' +contentData + '\n' +'thuộc mã nào sau đây và bạn chỉ cần trả lời là mã gì: '+ ward +'\n')
+                    if(string3):
                         break;
-                match2 = re.findall(pattern, string2)
-                if match2  and len(match2) == 1:
-                    number2 = match2[0]
-                    string3 = ""
-                    ward = searchWard(number2)
-                    while True:
-                        string3 = fetch_gemini('Hãy cho tôi biết mô tả địa chỉ sau:' +contentData + '\n' +'thuộc mã nào sau đây và bạn chỉ cần trả lời là mã gì: '+ ward +'\n')
-                        if(string3 != "" and len(re.findall(pattern, string3)) > 0):
-                            break;
-                    match3 = re.findall(pattern, string3)
-                    if( match3  and len(match3) == 1):
-                        number3 = match3[0]
-            return {'wardId':number3,'districtId':number2,'provinceId':number}                                     
-        return {'wardId':number3,'districtId':number2,'provinceId':number}
-    except:
-        return {'wardId':"26812"}
+                match3 = re.findall(pattern, string3)
+                if( match3  and len(match3) == 1):
+                    number3 = match3[0]
+        return {'wardId':number3,'districtId':number2,'provinceId':number}                                   
+    return {'wardId':number3,'districtId':number2,'provinceId':number}
+
 
 def remove_duplicates(array):
     unique_elements = list(set(array))
@@ -433,23 +428,23 @@ def count_element(array, element):
 def JobFitContent(dataLoad):
     idAddress = {'wardId':0}
     arrayJob = []
+    # print("vo",dataLoad)x
     for i in dataLoad:
         if i['type'] == 'info_person':
+            # print("oke1",i)
             idAddress = searchVitri(i['address'])
         elif i['type'] == 'info_project':
-            if len(i['moreCvProjects']) == 0 and i['moreCvProjects'][0].get('name', '') == "" and i['moreCvProjects'][0].get('position', '') == "" and i['moreCvProjects'][0].get('functionality', '') == "" and i['moreCvProjects'][0].get('technology', '') == "":
+
+            if len(i['moreCvProjects']) == 0 and i['moreCvProjects'][0]['name'] == "" and i['moreCvProjects'][0]['position'] == "" and i['moreCvProjects'][0]['functionality'] == "" and i['moreCvProjects'][0]['technology'] == "":
                 arrayJob.append("17")
                 break
             countBreak = 0
             dataInfo = ""
             for j in i['moreCvProjects']:
-                try:
-                    rechangeJ = replace_nulls_with_empty_string(j)
-                    if rechangeJ.get('name', '') == "" and j.get('position', '') == "" and rechangeJ.get('functionality', '') == "" and rechangeJ.get('technology', '') == "":
-                        countBreak = countBreak + 1
-                    dataInfo = dataInfo +rechangeJ.get('name') + ','+rechangeJ.get('position', '') + ','+rechangeJ.get('functionality', '')+','+rechangeJ.get('technology', '') +';'
-                except:
-                    dataInfo = ""
+                reChangeJ = replace_nulls_with_empty_string(j)
+                if reChangeJ['name'] == "" and reChangeJ['position'] == "" and reChangeJ['functionality'] == "" and reChangeJ['technology'] == "":
+                    countBreak = countBreak + 1
+                dataInfo = dataInfo +reChangeJ['name'] + ','+reChangeJ['position'] + ','+reChangeJ['functionality']+','+reChangeJ['technology'] +';'
             if countBreak == len(i['moreCvProjects']):
                 arrayJob.append("17")
             else:
@@ -463,10 +458,10 @@ def JobFitContent(dataLoad):
             countBreak = 0
             dataInfo = ""
             for j in i['moreCvExtraInformations']:
-                rechangeJ = replace_nulls_with_empty_string(j)
-                if rechangeJ['company'] == "" and rechangeJ['position'] == "" and rechangeJ['description'] == "":
+                reChangeJ = replace_nulls_with_empty_string(j)
+                if reChangeJ['company'] == "" and reChangeJ['position'] == "" and reChangeJ['description'] == "":
                     countBreak = countBreak + 1
-                dataInfo = dataInfo +rechangeJ['company'] + ','+rechangeJ['position'] + ' , '+rechangeJ['description'] +';'
+                dataInfo = dataInfo +reChangeJ['company'] + ','+reChangeJ['position'] + ' , '+reChangeJ['description'] +';'
             if countBreak == len(i['moreCvExtraInformations']):
                 arrayJob.append("17")
             else:
