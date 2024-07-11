@@ -39,7 +39,8 @@ def remove_accentsIf2(text):
 
 def resultFilter(text):
   textOk = text.split(':')
-  return textOk[0]
+  textNC = re.sub(r"[ , \n]", "", textOk[0])
+  return textNC
 
 def split_string_by_comma(text,type):
     result = text.split(type)
