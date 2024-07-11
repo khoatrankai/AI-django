@@ -7,7 +7,7 @@ from .models import BlogPost
 # from .serializers import BlogPostSerializer
 # from g4f.client import Client
 import requests
-from .train import searchDistrict,searchProvince22,searchProvince,searchWard,searchVitri,searchJobFit,JobFitContent,NewChatPublic,StartInfoChatPublic,FilterCvForPost,FilterPostForCv,CheckWarInfo
+from .train import searchDistrict,searchProvince22,searchProvince,searchWard,searchVitri,searchJobFit,JobFitContent,NewChatPublic,StartInfoChatPublic,FilterCvForPost,FilterPostForCv,CheckWarInfo,fetch_gemini,remove_accents,address_suit
 import json
 
 # client = Client()
@@ -64,15 +64,20 @@ def SearchJobData(request):
 @csrf_exempt
 def ChatAi22(request):
     if request.method == 'GET':
-        data = searchProvince22()
-        if data is not None:
-            return JsonResponse({'data': data})
-        else:
-            return JsonResponse({'message': 'Không thể lấy dữ liệu từ API'}, status=500)
+        return JsonResponse({'data': ""})
+        # data = searchProvince22()
+        # if data is not None:
+        #     return JsonResponse({'data': data})
+        # else:
+        #     return JsonResponse({'message': 'Không thể lấy dữ liệu từ API'}, status=500)
     elif request.method == 'POST':
         datas = json.loads(request.body)
-        # dataId = datas.get('id')
         dataContent = datas.get('content').replace('\n',"")
+        dataAI = address_suit(dataContent)
+       
+        return JsonResponse({'data':  dataAI})
+
+        
     else:
         return JsonResponse({'message':'Unsuccessful'}, status=405)
 

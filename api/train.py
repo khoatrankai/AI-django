@@ -5,12 +5,45 @@ import os
 import google.generativeai as genai
 # from .gpt4free.g4f.client import Client
 # client = Client()
+import unicodedata
 
 def replace_nulls_with_empty_string(obj):
     for key, value in obj.items():
         if value is None:
             obj[key] = ""
     return obj
+
+
+def remove_accents(text):
+  textLow = text.lower()
+  excluded_words = ["tỉnh", "thành phố", "phường", "xã", "quận", "huyện"]
+  pattern = r"\b(" + "|".join(excluded_words) + r")\b"
+  textRe = re.sub(pattern, "", textLow)
+  textOk = "".join(
+      unicodedata.normalize("NFKD", textRe).encode("ascii", "ignore").decode("ascii"))
+  textOk = re.sub(r"[ , \n]", "", textOk)
+  textNc = re.sub(r"[^\w\s]", "", textOk)
+  return textNc
+
+def remove_accentsIf2(text):
+  textLow = text.lower()
+  excluded_words = ["tỉnh", "thành phố", "phường", "xã", "quận", "huyện"]
+  pattern = r"\b(" + "|".join(excluded_words) + r")\b"
+  textRe = re.sub(pattern, "", textLow)
+  textOk = "".join(
+      unicodedata.normalize("NFKD", textRe).encode("ascii", "ignore").decode("ascii"))
+  textOkArray = textOk.split(',')
+  textOk = re.sub(r"[ , \n]", "", textOkArray[0]+textOkArray[2])
+  textNc = re.sub(r"[^\w\s]", "", textOk)
+  return textNc
+
+def resultFilter(text):
+  textOk = text.split(':')
+  return textOk[0]
+
+def split_string_by_comma(text,type):
+    result = text.split(type)
+    return result
 
 
 def merge_dict_values(obj, separator=','):
@@ -337,7 +370,7 @@ def fetch_gemini(content):
         print(response.text)
         return response.text
     except Exception as e:
-        return '10'
+        return 'none\n'
 
 def extract_words(text):
     words = re.findall(r'\b[A-Za-z]+\b', text)
@@ -478,7 +511,9 @@ def JobFitContent(dataLoad):
     arrayJob = []
     for i in dataLoad:
         if i['type'] == 'info_person':
-            idAddress = searchVitri(i['address'])
+            idAddress = '26848'
+            if(i['address'] != "" and i['address'] != None):
+                idAddress = address_suit(i['address'])
         elif i['type'] == 'info_project':
 
             if len(i['moreCvProjects']) == 0 and i['moreCvProjects'][0]['name'] == "" and i['moreCvProjects'][0]['position'] == "" and i['moreCvProjects'][0]['functionality'] == "" and i['moreCvProjects'][0]['technology'] == "":
@@ -516,7 +551,7 @@ def JobFitContent(dataLoad):
     print(countItem)
     for i in countItem:
         # dataPercent.append({'categoryId':i,'percent':count_element(arrayJob,i)})
-        dataPercent.append({'parentCategoryId':i,'wardId':idAddress['wardId'],'percent':count_element(arrayJob,i)})
+        dataPercent.append({'parentCategoryId':i,'wardId':idAddress,'percent':count_element(arrayJob,i)})
         print(idAddress['wardId'])
     return dataPercent
     
@@ -613,6 +648,28 @@ def FilterPostForCv(contentCV,listPost):
         listRender.append({'postId':i})
     # print(listRender)
     return listRender
+
+def address_suit(addressSearch):
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_directory, 'data', 'diachi.txt')
+    f = open(file_path, "r", encoding="utf-8")
+    content = f.read()
+    f.close()
+    contentGemini = fetch_gemini("Hãy cho tôi biết mô tả sau:'"+ addressSearch+"' thuộc phường/xã , quận/huyện,tỉnh/thành phố nào ở việt nam hãy output theo kiểu:'phường gì,quận gì,tỉnh gỉ' nếu bạn biết còn nếu bạn không biết hãy output:'none'")
+    print(contentGemini)
+    if 'none' in contentGemini:
+        return '26848'
+    else:
+        textArray = content.split('\n')
+        # print(textArray)
+        for i in textArray:
+            print(remove_accents(contentGemini) , remove_accents(i))
+            if remove_accents(contentGemini) in remove_accents(i):
+                return resultFilter(i)
+            else:
+                if remove_accentsIf2(contentGemini) in remove_accentsIf2(i):
+                    return resultFilter(i)
+        return '26848' 
 
 # def FilterPostCV(contentCV,listPost):
 #     descriptionPost = "Trong các post trên hãy sắp xếp các Post theo mức độ phù hợp từ cao đến thấp (chỉ cần ghi mỗi mã Post và sắp xếp có dấu phẩy ngăn cách) theo tiêu chí của cv xin việc sau :"+contentCV
