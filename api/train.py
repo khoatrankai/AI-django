@@ -514,6 +514,7 @@ def JobFitContent(dataLoad):
             idAddress = '26848'
             if(i['address'] != "" and i['address'] != None):
                 idAddress = address_suit(i['address'])
+                print(idAddress)
         elif i['type'] == 'info_project':
 
             if len(i['moreCvProjects']) == 0 and i['moreCvProjects'][0]['name'] == "" and i['moreCvProjects'][0]['position'] == "" and i['moreCvProjects'][0]['functionality'] == "" and i['moreCvProjects'][0]['technology'] == "":
@@ -552,7 +553,6 @@ def JobFitContent(dataLoad):
     for i in countItem:
         # dataPercent.append({'categoryId':i,'percent':count_element(arrayJob,i)})
         dataPercent.append({'parentCategoryId':i,'wardId':idAddress,'percent':count_element(arrayJob,i)})
-        print(idAddress['wardId'])
     return dataPercent
     
 def CheckWarInfo(dataLoad):
@@ -656,7 +656,7 @@ def address_suit(addressSearch):
     content = f.read()
     f.close()
     contentGemini = fetch_gemini("Hãy cho tôi biết mô tả sau:'"+ addressSearch+"' thuộc phường/xã , quận/huyện,tỉnh/thành phố nào ở việt nam hãy output theo kiểu:'phường gì,quận gì,tỉnh gỉ' nếu bạn biết còn nếu bạn không biết hãy output:'none'")
-    print(contentGemini)
+    # print(contentGemini)
     if 'none' in contentGemini:
         return '26848'
     else:
