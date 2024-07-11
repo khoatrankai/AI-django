@@ -576,7 +576,7 @@ def CheckWarInfo(dataLoad):
                     dataCheck = reChangeJ['company'] + ','+reChangeJ['position'] + ' , '+reChangeJ['description']+','+reChangeJ['time']
                     arrayCheck.append(dataCheck)
         
-        check = fetch_geminiWar('Hãy giúp mình nhận biết đoạn sau có từ nào gây kích động,mang tính xúc phạm,thô tục,thiếu văn hóa, văn tục chửi thề không lịch sự nếu có thì bạn ghi số 1 nếu không bạn ghi số 0:'+'"'+" ".join(arrayCheck)+'"')
+        check = fetch_geminiWar('Hãy giúp mình nhận biết đoạn sau có từ nào gây kích động,mang tính xúc phạm,thô tục,thiếu văn hóa, văn tục chửi thề không lịch sự nếu có thì Output:"1" nếu không thì Output:"0":'+'"'+" ".join(arrayCheck)+'"')
         pattern = r'\d+'
         match = re.findall(pattern, check)
         if len(match) > 0 and match[0] == "1":
