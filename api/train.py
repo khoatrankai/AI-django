@@ -65,7 +65,7 @@ def ChangeDataTxt(link,content):
       fileNew.write(content)
 
 def fetch_geminiOption(content,listContent):
-    # print(listContent)
+    print(listContent,content)
     genai.configure(api_key="AIzaSyBXMkCTesAVSATUSUpfKyv5dTzetZd1hGw")
 
     # Set up the model
@@ -612,6 +612,8 @@ def FilterCvForPost(contentPost,listCV):
     for i in listMatch:
         listRender.append({'accountId':listCV[int(i)-1]['accountId'],'cvIndex':listCV[int(i)-1]['cvIndex']})
     # print(listRender)
+    if(len(listRender) == 0):
+        return listCV
     return listRender
 
 
