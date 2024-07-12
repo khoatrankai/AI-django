@@ -65,7 +65,7 @@ def ChangeDataTxt(link,content):
       fileNew.write(content)
 
 def fetch_geminiOption(content,listContent):
-    print(listContent,content)
+    # print(listContent)
     genai.configure(api_key="AIzaSyBXMkCTesAVSATUSUpfKyv5dTzetZd1hGw")
 
     # Set up the model
