@@ -650,6 +650,9 @@ def FilterPostForCv(contentCV,listPost):
     for i in listMatch:
         listRender.append({'postId':i})
     # print(listRender)
+    if(len(listRender) == 0):
+        for i in listPost:
+            listRender.append({'postId':i['id']})
     return listRender
 
 def address_suit(addressSearch):
