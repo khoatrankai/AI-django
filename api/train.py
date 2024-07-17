@@ -65,7 +65,7 @@ def ChangeDataTxt(link,content):
       fileNew.write(content)
 
 def fetch_geminiOption(content,listContent):
-    # print(listContent)
+    print(listContent)
     genai.configure(api_key="AIzaSyBXMkCTesAVSATUSUpfKyv5dTzetZd1hGw")
 
     # Set up the model
@@ -586,9 +586,11 @@ def CheckWarInfo(dataLoad):
         return 0
 
 def FilterCvForPost(contentPost,listCV):
-    descriptionPost = "Trong các CV trên hãy sắp xếp các CV theo mức độ phù hợp từ cao đến thấp (chỉ cần ghi mỗi mã CV và sắp xếp có dấu phẩy ngăn cách) theo chỉ tiêu của bài đăng sau :"+contentPost
+    descriptionPost = "Trong các CV trên hãy sắp xếp các CV theo mức độ phù hợp từ cao đến thấp (chỉ cần ghi mỗi mã CV và sắp xếp có dấu phẩy ngăn cách Output:'CV#...' nếu có thêm thì ',CV#..') theo chỉ tiêu của bài đăng sau :"+contentPost
     arrayCV = []
     # print(listCV)
+    if len(listCV) == 1:
+        return listCV
     for idataLoad in range(len(listCV)):
         descripCV = "mã CV#"+str(idataLoad+1)+":\n"+"'"
         for i in listCV[idataLoad]['cvExtraInformation']:
@@ -608,8 +610,11 @@ def FilterCvForPost(contentPost,listCV):
         arrayCV.append({"role":"user","parts":descripCV+"'"})
     regex = r"\d+"
     listMatch = re.findall(regex,fetch_geminiOption(descriptionPost,arrayCV))
+    print(listMatch)
     listRender = []
     for i in listMatch:
+        # print({'accountId':listCV[int(i)-1]['accountId'],'cvIndex':listCV[int(i)-1]['cvIndex']})
+        # print(int(i)-1,listCV[1])
         listRender.append({'accountId':listCV[int(i)-1]['accountId'],'cvIndex':listCV[int(i)-1]['cvIndex']})
     # print(listRender)
     if(len(listRender) == 0):
@@ -634,7 +639,7 @@ def FilterPostForCv(contentCV,listPost):
                 dataInfo = dataInfo +j['company'] + ' '+j['position'] + ' '+j['description'] +','
             descripCV =  descripCV + dataInfo +'\n'\
             
-    descriptionCV = "Trong các Post trên hãy sắp xếp các Post theo mức độ phù hợp từ cao đến thấp (chỉ cần ghi mỗi mã Post và sắp xếp có dấu phẩy ngăn cách) theo chỉ tiêu của CV sau :"+descripCV
+    descriptionCV = "Trong các Post trên hãy sắp xếp các Post theo mức độ phù hợp từ cao đến thấp (chỉ cần ghi mỗi mã Post và sắp xếp có dấu phẩy ngăn cách  Output:'POST#...' nếu có thêm thì ',POST#..') theo chỉ tiêu của CV sau :"+descripCV
     
     for idataLoad in listPost:
         descripPost = "mã POST#"+str(idataLoad['id'])+":\n"+"'"
